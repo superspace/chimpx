@@ -24,6 +24,11 @@
  *
  * @package chimpx
  */
+
+require("vendor/autoload.php");
+
+use \DrewM\MailChimp\MailChimp;
+
 class chimpx {
     public $mc = null;
     public $request;
@@ -55,11 +60,12 @@ class chimpx {
 
         // Let's load the MailChimp API
         if (!$this->mc) {
-            if (!$this->modx->loadClass('mailchimp.MCAPI', $this->config['modelPath'], true, true)) {
-                $this->modx->log(modX::LOG_LEVEL_ERROR, '[chimpx] - unable to load MailChimp API');
-                return false;
-            }
-            $mc = new MCAPI($this->modx->getOption('chimpx.apikey'), true);
+            // if (!$this->modx->loadClass('mailchimp.MCAPI', $this->config['modelPath'], true, true)) {
+            //     $this->modx->log(modX::LOG_LEVEL_ERROR, '[chimpx] - unable to load MailChimp API');
+            //     return false;
+            // }
+            //$mc = new MCAPI($this->modx->getOption('chimpx.apikey'), true);
+            $mc = new MailChimp($this->modx->getOption('chimpx.apikey'));
             $this->mc = $mc;
         }
 
@@ -162,7 +168,8 @@ class chimpx {
      */
     public function getCampaigns($filters = array(), $start = false, $limit = false) {
         // @todo: introduce ACLs (filter some lists is the user is not allowed)
-        $campaigns = $this->mc->campaigns($filters, $start, $limit);
+        //$campaigns = $this->mc->campaigns($filters, $start, $limit);
+        $campaigns = $this->mc->post("campaigns");
         return $campaigns;
     }
 
