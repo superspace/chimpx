@@ -43,7 +43,7 @@ if ($chimpx->isError()){
     return $chimpx->getError();
 }
 
-$count = $campaigns['total'];
+$count = $campaigns['total_items'];
 $list = $chimpx->displayCampaigns($campaigns);
 
 return $this->outputArray($list, $count);

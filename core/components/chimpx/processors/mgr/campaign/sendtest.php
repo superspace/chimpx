@@ -29,8 +29,8 @@
  */
 $chimpx =& $modx->chimpx;
 
-$cid = isset($scriptProperties['id']) ? $scriptProperties['id'] : false;
-$emails = isset($scriptProperties['test_email']) ? array($scriptProperties['test_email']) : false;
+$cid = isset($scriptProperties['id']) ? $scriptProperties['id'] : '';
+$emails = isset($scriptProperties['test_email']) ? $scriptProperties['test_email'] : '';
 
 $chimpx->campaignSendTest($cid, $emails);
 

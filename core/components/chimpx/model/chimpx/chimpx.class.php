@@ -25,7 +25,7 @@
  * @package chimpx
  */
 
-require("vendor/autoload.php");
+require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
 use \DrewM\MailChimp\MailChimp;
 
@@ -167,10 +167,27 @@ class chimpx {
      * @return array The campaigns list
      */
     public function getCampaigns($filters = array(), $start = false, $limit = false) {
-        // @todo: introduce ACLs (filter some lists is the user is not allowed)
-        //$campaigns = $this->mc->campaigns($filters, $start, $limit);
-        $campaigns = $this->mc->post("campaigns");
+        $params = array('filters'=>$filters, 'offset'=>$start, 'count'=>$limit);
+        $campaigns = $this->mc->get('campaigns', $params);
         return $campaigns;
+    }
+
+    public function getCampaign($cid) {
+        $campaign = $this->mc->get('campaign/' . $cid);
+        //TODO: Error checking
+        // if ($campaign->errorCode){
+        //     $msg = $modx->lexicon('chimpx.error_info', array(
+        //         'number' => $api->errorCode,
+        //         'message' => $api->errorMessage,
+        //     ));
+        //     return $modx->error->failure($msg);
+        return $campaign;
+    }
+
+    public function getCampaignContent($cid) {
+        $content = $this->mc->get('campaign/' . $cid . '/content');
+        //TODO: Error checking
+        return $content;
     }
 
     /**
@@ -181,9 +198,12 @@ class chimpx {
      */
     public function displayCampaigns($campaigns = array()) {
         $list = array();
-        foreach ($campaigns['data'] as $campaign) {
-            $listname = $this->mc->lists(array('list_id' => $campaign['list_id']));
-            $campaign['listname'] = $listname['data'][0]['name'];
+
+        foreach ($campaigns['campaigns'] as $campaign) {
+
+            $campaign['listname'] = $campaign['recipients']['list_name'];
+            $campaign['title'] = $campaign['settings']['title'];
+            $campaign['subject'] = $campaign['settings']['subject_line'];
             $campaign['status'] = $this->modx->lexicon('chimpx.campaign_status_'.$campaign['status']);
             $list[] = $campaign;
         }
@@ -198,7 +218,8 @@ class chimpx {
      */
     public function campaignDelete($id) {
         // @todo: ACLs (is user allowed to delete a campaign)
-        $this->mc->campaignDelete($id);
+        //$this->mc->campaignDelete($id);
+        $this->mc->delete('campaigns/' . $id);
     }
 
     /**
@@ -208,7 +229,8 @@ class chimpx {
      * @param string $id The campaign ID
      */
     public function campaignReplicate($id) {
-        $this->mc->campaignReplicate($id);
+        // $this->mc->campaignReplicate($id);
+        $this->mc->post('campaigns/' . $id . '/actions/replicate');
     }
 
     /**
@@ -218,7 +240,8 @@ class chimpx {
      * @param string $id The campaign ID
      */
     public function campaignSend($id) {
-        $this->mc->campaignSendNow($id);
+        // $this->mc->campaignSendNow($id);
+        $this->mc->post('campaigns/' . $id . '/actions/send');
     }
 
     /**
@@ -230,11 +253,16 @@ class chimpx {
      */
     public function campaignSendtest($id, $to) {
         $emails = array();
+
         $emailList = explode(',', $to);
         foreach ($emailList as $email) {
             $emails[] = trim($email);
         }
-        $this->mc->campaignSendTest($id, $emails);
+        // $this->mc->campaignSendTest($id, $emails);
+
+        $params = array('test_emails'=>$emails, 'send_type'=>'html');
+
+        $this->mc->post('campaigns/' . $id . '/actions/test', $params, 30);
     }
 
     /**
@@ -245,11 +273,11 @@ class chimpx {
      * @param array $data An array of fields => values
      */
     public function campaignUpdate($id, array $data = array()) {
-        // @todo: control the $_POST data & unset unwanted ones, make sure the campaign is not already sent
+        // @TODO: control the $_POST data & unset unwanted ones, make sure the campaign is not already sent
         unset ($data['id']);
-        foreach ($data as $field => $value) {
-            $this->mc->campaignUpdate($id, $field, $value);
-        }
+        // foreach ($data as $field => $value) {
+        //     $this->mc->campaignUpdate($id, $field, $value);
+        // }
     }
 
     /**
@@ -259,12 +287,39 @@ class chimpx {
      * @param array $data The campaign data
      */
     public function campaignCreate(array $data = array()) {
+
         $type = isset($data['campaign_type'])? $data['campaign_type'] : 'regular';
-        $options = array();
-        $content = array();
-        $segmentOptions = null;
-        $typeOptions = null;
-        $this->mc->campaignCreate($type, $options, $content, $segmentOptions, $typeOptions);
+
+        // $options = array();
+        // $content = array();
+        // $segmentOptions = null;
+        // $typeOptions = null;
+        //$this->mc->campaignCreate($type, $options, $content, $segmentOptions, $typeOptions);
+
+        $settings = [];
+
+        $settings['subject_line'] = $data['subject'];
+        $settings['title'] = $data['title'];
+        $settings['from_name'] = $data['from_name'];
+        $settings['reply_to'] = $data['from_email'];
+
+        $recipients = [];
+        $recipients['list_id'] = $data['list_select'];
+
+        $params = [];
+        $params['type'] = $type;
+        $params['recipients'] = $recipients;
+        $params['settings'] = $settings;
+        
+        $campaign = $this->mc->post('campaigns', $params);
+
+        $cid = $campaign['id'];
+
+        $content = [];
+        $content['url'] = 'https://www.asmobil.ch/de/meta/newsletter/die-fasnacht-steht-vor-der-tuer-der-fruehling-kommt-bald.html';//$modx->makeUrl($data['url']);
+
+        $this->mc->put('campaigns/' . $cid . '/content', $content);
+
     }
 
     /**
@@ -277,8 +332,12 @@ class chimpx {
      * @return array The list(s) details
      */
     public function getLists(array $filters = array(), $start = null, $limit = null) {
-        $limit = $limit > 100 ? 100 : $limit;
-        $lists = $this->mc->lists($filters, $start, $limit);
+        // $limit = $limit > 100 ? 100 : $limit;
+        //$lists = $this->mc->lists($filters, $start, $limit);
+
+        $params = array('offset'=>$offset,'count'=>$limit);
+        $lists = $this->mc->get('lists', $params);
+
         return $lists;
     }
 
@@ -292,7 +351,7 @@ class chimpx {
      */
     public function displayLists(array $data = array(), $mergeTags = false, $location = false) {
         $output = array();
-        foreach ($data['data'] as $listData) {
+        foreach ($data['lists'] as $listData) {
             $stats = $listData['stats'];
             unset ($listData['stats']);
             // Threat the stats data (prefixed with "stats-")
@@ -479,10 +538,10 @@ class chimpx {
      * @return boolean
      */
     public function isError() {
-        if ($this->mc->errorCode){
-            return true;
+        if ($this->mc->success()){
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -492,14 +551,13 @@ class chimpx {
      * @return array|string The error message
      */
     public function getError() {
-        if ($this->mc->errorCode){
-            // @todo: provide more readable error messages
-            /*$code = ltrim($this->mc->errorCode, '-');
-            $i18n = $this->modx->lexicon('chimpx_error_'. $code);*/
+        if ($this->isError()){
+            $error = $this->mc->getLastError();
             $msg = $this->modx->lexicon('chimpx.error_info', array(
-                'number' => $this->mc->errorCode,
-                'message' => $this->mc->errorMessage,
+                'number' => '',
+                'message' => $error,
             ));
+
             return $this->modx->error->failure($msg);
         }
     }

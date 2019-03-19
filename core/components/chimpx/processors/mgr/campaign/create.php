@@ -33,69 +33,69 @@ $chimpx =& $modx->chimpx;
 if (!empty($scriptProperties['campaign_type'])) {
     $type = $scriptProperties['campaign_type'];
 } else {
-        $msg = $modx->lexicon('chimpx.campaign_campaign_type_ns');
-        $modx->log(modX::LOG_LEVEL_INFO,$msg);
-        return $modx->error->failure($msg);
+    $msg = $modx->lexicon('chimpx.campaign_campaign_type_ns');
+    $modx->log(modX::LOG_LEVEL_INFO,$msg);
+    return $modx->error->failure($msg);
 }
 
 // standard options for the campaign
 $opts = array();
 
-    // let's check if a list has been choosen (required)
-    if (!empty($scriptProperties['list_select'])) {
-        $opts['list_id'] = $scriptProperties['list_select'];
-    } else {
-        $msg = $modx->lexicon('chimpx.campaign_list_select_desc');
-        $modx->log(modX::LOG_LEVEL_INFO,$msg);
-        return $modx->error->failure($msg);
-    }
+// let's check if a list has been choosen (required)
+if (!empty($scriptProperties['list_select'])) {
+    $opts['list_id'] = $scriptProperties['list_select'];
+} else {
+    $msg = $modx->lexicon('chimpx.campaign_list_select_desc');
+    $modx->log(modX::LOG_LEVEL_INFO,$msg);
+    return $modx->error->failure($msg);
+}
 
-    // @TODO: get lits's default subject if exists
-    if (!empty($scriptProperties['subject'])) {
-        $opts['subject'] = $scriptProperties['subject'];
-    } else {
-        $msg = $modx->lexicon('chimpx.campaign_campaign_subject_ns');
-        $modx->log(modX::LOG_LEVEL_INFO,$msg);
-        return $modx->error->failure($msg);
-    }
+// @TODO: get lits's default subject if exists
+if (!empty($scriptProperties['subject'])) {
+    $opts['subject'] = $scriptProperties['subject'];
+} else {
+    $msg = $modx->lexicon('chimpx.campaign_campaign_subject_ns');
+    $modx->log(modX::LOG_LEVEL_INFO,$msg);
+    return $modx->error->failure($msg);
+}
 
-    $opts['title'] = $scriptProperties['title'];
+$opts['title'] = $scriptProperties['title'];
 
-    // @TODO: get lists's default from_email + regex to check input value == email format
-    if (!empty($scriptProperties['from_email'])) {
-        $opts['from_email'] = $scriptProperties['from_email'];
-    } else {
-        $msg = $modx->lexicon('chimpx.list_from_email_ns');
-        $modx->log(modX::LOG_LEVEL_INFO,$msg);
-        return $modx->error->failure($msg);
-    }
+// @TODO: get lists's default from_email + regex to check input value == email format
+if (!empty($scriptProperties['from_email'])) {
+    $opts['from_email'] = $scriptProperties['from_email'];
+} else {
+    $msg = $modx->lexicon('chimpx.list_from_email_ns');
+    $modx->log(modX::LOG_LEVEL_INFO,$msg);
+    return $modx->error->failure($msg);
+}
 
-    // @TODO: get lists's default from_name
-    if (!empty($scriptProperties['from_name'])) {
-        $opts['from_name'] = $scriptProperties['from_name'];
-    } else {
-        $msg = $modx->lexicon('chimpx.list_from_name_ns');
-        $modx->log(modX::LOG_LEVEL_INFO,$msg);
-        return $modx->error->failure($msg);
-    }
+// @TODO: get lists's default from_name
+if (!empty($scriptProperties['from_name'])) {
+    $opts['from_name'] = $scriptProperties['from_name'];
+} else {
+    $msg = $modx->lexicon('chimpx.list_from_name_ns');
+    $modx->log(modX::LOG_LEVEL_INFO,$msg);
+    return $modx->error->failure($msg);
+}
 
-    // @TODO: get list's MergeVars » http://apidocs.mailchimp.com/1.3/listmergevars.func.php
-    $opts['to_name'] = $scriptProperties['to_name'];
+// @TODO: get list's MergeVars » http://apidocs.mailchimp.com/1.3/listmergevars.func.php
+$opts['to_name'] = $scriptProperties['to_name'];
 
-    //$opts['generate_text'] = $scriptProperties['chimpx_boolean'];
-    $opts['generate_text'] = true;
+//$opts['generate_text'] = $scriptProperties['chimpx_boolean'];
+$opts['generate_text'] = true;
 
 
 // content for the campaign
 $content = array();
-    // @TODO: check if the value is an integer && resource exists && is published
-    if (!empty($scriptProperties['url'])) {
-        $content['url'] = $modx->makeUrl($scriptProperties['url']);
-    } else {
-        $msg = $modx->lexicon('chimpx.campaign_url_err');
-        $modx->log(modX::LOG_LEVEL_INFO,$msg);
-        return $modx->error->failure($msg);
-    }
+// @TODO: check if the value is an integer && resource exists && is published
+if (!empty($scriptProperties['url'])) {
+    $content['url'] = $modx->makeUrl($scriptProperties['url']);
+} else {
+    $msg = $modx->lexicon('chimpx.campaign_url_err');
+    $modx->log(modX::LOG_LEVEL_INFO,$msg);
+    return $modx->error->failure($msg);
+}
 
 
 // segmentation options

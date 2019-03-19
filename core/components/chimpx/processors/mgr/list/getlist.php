@@ -40,7 +40,7 @@ if ($chimpx->isError()){
     return $chimpx->getError();
 }
 
-$count = $lists['total'];
+$count = $lists['total_items'];
 $output = $chimpx->displayLists($lists);
 
 return $this->outputArray($output, $count);

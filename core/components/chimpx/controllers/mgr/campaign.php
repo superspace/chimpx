@@ -28,37 +28,21 @@
  * @subpackage controllers
  */
 
-$record = array();
+$record = [];
 $create = empty($_REQUEST['id']) ? true : false;
 
 if (!$create) {
     // We are editing a campaign, load its data
-    $api = new MCAPI($modx->getOption('chimpx.apikey'), true);
-    $start = $modx->getOption('start', $_REQUEST, 0);
-    $limit = $modx->getOption('limit', $_REQUEST, 20);
 
-    // filters to apply to the query
-    $filters = array();
-    if ($_REQUEST['id']) $filters['campaign_id'] = $_REQUEST['id'];
-    //if ($status) $filters['status'] = $status;
+    $cid = $_REQUEST['id'];
 
-    $campaign = $api->campaigns($filters);
-    if ($api->errorCode){
-        $msg = $modx->lexicon('chimpx.error_info', array(
-            'number' => $api->errorCode,
-            'message' => $api->errorMessage,
-        ));
-        return $modx->error->failure($msg);
-    }
-    $content = $api->campaignContent($_REQUEST['id']);
-    $record = $campaign['data'][0];
+    $campaign = $chimpx->getCampaign($cid);
+    $content = $chimpx->getCampaignContent($cid);
+
     $record['html'] = $content['html'];
-    $record['text'] = $content['text'];
+    $record['text'] = $content['plain_text'];
 }
 
-/*$modx->regClientStartupScript($chimpx->config['jsUrl'].'mgr/widgets/lists.grid.js');
-//$modx->regClientStartupScript($chimpx->config['jsUrl'].'mgr/widgets/campaign.wizard.js');
-$modx->regClientStartupScript($chimpx->config['jsUrl'].'mgr/widgets/campaigns.grid.js');*/
 $modx->regClientStartupScript($chimpx->config['jsUrl'].'mgr/widgets/core/chimpx.combos.js');
 $modx->regClientStartupScript($chimpx->config['jsUrl'].'mgr/widgets/campaign/campaign.panel.js');
 $modx->regClientStartupScript($chimpx->config['jsUrl'].'mgr/sections/campaign.js');
