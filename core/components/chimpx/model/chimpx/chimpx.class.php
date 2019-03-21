@@ -210,6 +210,11 @@ class chimpx {
         return $list;
     }
 
+    public function ping () {
+        $response = $this->mc->get('ping');
+        return $response['health_status'];
+    }
+
     /**
      * Deletes the given campaign
      * http://apidocs.mailchimp.com/1.3/campaigndelete.func.php
@@ -218,7 +223,6 @@ class chimpx {
      */
     public function campaignDelete($id) {
         // @todo: ACLs (is user allowed to delete a campaign)
-        //$this->mc->campaignDelete($id);
         $this->mc->delete('campaigns/' . $id);
     }
 
@@ -229,7 +233,6 @@ class chimpx {
      * @param string $id The campaign ID
      */
     public function campaignReplicate($id) {
-        // $this->mc->campaignReplicate($id);
         $this->mc->post('campaigns/' . $id . '/actions/replicate');
     }
 
@@ -240,7 +243,6 @@ class chimpx {
      * @param string $id The campaign ID
      */
     public function campaignSend($id) {
-        // $this->mc->campaignSendNow($id);
         $this->mc->post('campaigns/' . $id . '/actions/send');
     }
 
@@ -258,7 +260,6 @@ class chimpx {
         foreach ($emailList as $email) {
             $emails[] = trim($email);
         }
-        // $this->mc->campaignSendTest($id, $emails);
 
         $params = array('test_emails'=>$emails, 'send_type'=>'html');
 
@@ -288,7 +289,7 @@ class chimpx {
      */
     public function campaignCreate(array $data = array()) {
 
-        $type = isset($data['campaign_type'])? $data['campaign_type'] : 'regular';
+        $type = 'regular';
 
         // $options = array();
         // $content = array();
@@ -316,7 +317,8 @@ class chimpx {
         $cid = $campaign['id'];
 
         $content = [];
-        $content['url'] = 'https://www.asmobil.ch/de/meta/newsletter/die-fasnacht-steht-vor-der-tuer-der-fruehling-kommt-bald.html';//$modx->makeUrl($data['url']);
+        $content['url'] = $this->modx->makeUrl($data['url'],'','','abs');
+        //$content['url'] = 'https://superspace.ch/urs-beyeler.html';
 
         $this->mc->put('campaigns/' . $cid . '/content', $content);
 
@@ -333,7 +335,6 @@ class chimpx {
      */
     public function getLists(array $filters = array(), $start = null, $limit = null) {
         // $limit = $limit > 100 ? 100 : $limit;
-        //$lists = $this->mc->lists($filters, $start, $limit);
 
         $params = array('offset'=>$offset,'count'=>$limit);
         $lists = $this->mc->get('lists', $params);
@@ -530,6 +531,24 @@ class chimpx {
     public function listLocations($id) {
         $locations = $this->mc->listLocations($id);
         return $locations;
+    }
+
+    public function getResources () {
+
+        $templates = $this->modx->getOption('chimpx.templates', '', '');
+        if ($templates) $templates = explode(',', $templates);
+
+        $query = $this->modx->newQuery('modDocument');
+        $query->where(array('published'=>1));
+        $query->where(array('deleted:!='=>1));
+        if ($templates) {
+            $query->where(array('template:IN'=>$templates));
+        }
+        $query->sortby('pagetitle', 'ASC');
+
+        $items = $this->modx->getCollection('modDocument', $query);
+
+        return $items;
     }
 
     /**

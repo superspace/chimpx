@@ -19,12 +19,14 @@ chimpx.page.Home = function(config) {
         ,buttons: [{
             text: _('chimpx.check_mailchimp_status')
             ,handler: this.checkStatus
-        },{
-            text: _('chimpx.mailchimp_account')
-            ,handler: function() {
-                location.href = '?a='+ chimpx.action + '&action=account';
-            }
-        },{
+        },
+        // {
+        //     text: _('chimpx.mailchimp_account')
+        //     ,handler: function() {
+        //         location.href = '?a='+ chimpx.action + '&action=account';
+        //     }
+        // },
+        {
             text: _('chimpx_help')
             ,handler: this.mailchimpHelp
         }]

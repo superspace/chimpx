@@ -301,16 +301,18 @@ chimpx.window.CreateCampaign = function(config) {
             ,name: 'list_select'
             ,width: 300
             ,listWidth: 300
-        },{
-            xtype: 'chimpx-combo-campaigntype'
-            ,fieldLabel: _('chimpx.campaign_campaign_type')
-            ,description: _('chimpx.campaign_campaign_type_desc')
-            ,labelStyle: 'width: 180px'
-            ,name: 'campaign_type'
-            ,width: 300
-            ,listWidth: 300
-            ,allowBlank: false
-        },{
+        }
+        // ,{
+        //     xtype: 'chimpx-combo-campaigntype'
+        //     ,fieldLabel: _('chimpx.campaign_campaign_type')
+        //     ,description: _('chimpx.campaign_campaign_type_desc')
+        //     ,labelStyle: 'width: 180px'
+        //     ,name: 'campaign_type'
+        //     ,width: 300
+        //     ,listWidth: 300
+        //     ,allowBlank: false
+        // }
+        ,{
             xtype: 'textfield'
             ,fieldLabel: _('chimpx.campaign_subject')
             ,description: _('chimpx.campaign_subject_desc')
@@ -329,12 +331,13 @@ chimpx.window.CreateCampaign = function(config) {
             ,id: 'chimpx-'+this.ident+'-title'
             ,width: 300
         },{
-            xtype: 'textfield'
-            //xtype: 'chimpx-choose-resource'
+            //xtype: 'textfield'
+            xtype: 'chimpx-combo-resources'
             ,fieldLabel: _('chimpx.campaign_url')
             ,description: _('chimpx.campaign_url_desc')
             ,labelStyle: 'width: 180px'
             ,name: 'url'
+            ,listWidth: 300
             ,id: 'chimpx-'+this.ident+'-url'
             ,width: 300
             ,allowBlank: false
@@ -577,45 +580,76 @@ chimpx.combo.listLists = function(config) {
 Ext.extend(chimpx.combo.listLists, MODx.combo.ComboBox);
 Ext.reg('chimpx-combo-listlists', chimpx.combo.listLists);
 
-// campaigns types combo box
-chimpx.combo.CampaignTypes = function(config) {
+// MailChimp lists combo box
+chimpx.combo.listResources = function(config) {
     config = config || {};
     Ext.applyIf(config, {
-        name : 'campaign_type'
-        ,hiddenName : 'campaign_type'
+        name : 'url'
+        ,hiddenName : 'url'
         ,forceSelection: true
         ,selectOnFocus: true
-        ,displayField : 'campaign-type'
+        ,fields: ['id', 'name']
+        ,displayField : 'name'
         ,valueField : 'id'
         ,triggerAction : 'all'
         ,lazyRender: true
-        ,mode : 'local'
-        ,typeAhead: true
+        ,editable : false
+        ,typeAhead: false
         ,width : 150
-        ,listWidth: 150
-        ,editable: false
-        ,blankText: _('chimpx.campaigntype_combo_blank')
-        ,emptyText: _('chimpx.campaigntype_combo_empty')
+        ,listWidth: 200
+        ,blankText: _('chimpx.list_combo_blank')
+        ,emptyText: _('chimpx.list_combo_empty')
         ,allowBlank: false
-        ,store : new Ext.data.SimpleStore({
-            fields : ['id', 'campaign-type']
-            ,data : [
-                ['regular', _('chimpx.campaigntype_combo_regular')]
-                /*,['plaintext', _('chimpx.campaigntype_combo_plaintext')]
-                ,['absplit', _('chimpx.campaigntype_combo_absplit')]
-                ,['rss', _('chimpx.campaigntype_combo_rss')]
-                ,['trans', _('chimpx.campaigntype_combo_trans')]
-                ,['auto', _('chimpx.campaigntype_combo_auto')]*/
-            ]
-        })
+        ,url: chimpx.config.connector_url
         ,baseParams: {
-            combo: true
+            action: 'mgr/list/getresources'
+            ,combo: true
         }
     });
-    chimpx.combo.CampaignTypes.superclass.constructor.call(this, config);
+    chimpx.combo.listResources.superclass.constructor.call(this, config);
 };
-Ext.extend(chimpx.combo.CampaignTypes, MODx.combo.ComboBox);
-Ext.reg('chimpx-combo-campaigntype', chimpx.combo.CampaignTypes);
+Ext.extend(chimpx.combo.listResources, MODx.combo.ComboBox);
+Ext.reg('chimpx-combo-resources', chimpx.combo.listResources);
+
+// campaigns types combo box
+// chimpx.combo.CampaignTypes = function(config) {
+//     config = config || {};
+//     Ext.applyIf(config, {
+//         name : 'campaign_type'
+//         ,hiddenName : 'campaign_type'
+//         ,forceSelection: true
+//         ,selectOnFocus: true
+//         ,displayField : 'campaign-type'
+//         ,valueField : 'id'
+//         ,triggerAction : 'all'
+//         ,lazyRender: true
+//         ,mode : 'local'
+//         ,typeAhead: true
+//         ,width : 150
+//         ,listWidth: 150
+//         ,editable: false
+//         ,blankText: _('chimpx.campaigntype_combo_blank')
+//         ,emptyText: _('chimpx.campaigntype_combo_empty')
+//         ,allowBlank: false
+//         ,store : new Ext.data.SimpleStore({
+//             fields : ['id', 'campaign-type']
+//             ,data : [
+//                 ['regular', _('chimpx.campaigntype_combo_regular')]
+//                 /*,['plaintext', _('chimpx.campaigntype_combo_plaintext')]
+//                 ,['absplit', _('chimpx.campaigntype_combo_absplit')]
+//                 ,['rss', _('chimpx.campaigntype_combo_rss')]
+//                 ,['trans', _('chimpx.campaigntype_combo_trans')]
+//                 ,['auto', _('chimpx.campaigntype_combo_auto')]*/
+//             ]
+//         })
+//         ,baseParams: {
+//             combo: true
+//         }
+//     });
+//     chimpx.combo.CampaignTypes.superclass.constructor.call(this, config);
+// };
+// Ext.extend(chimpx.combo.CampaignTypes, MODx.combo.ComboBox);
+// Ext.reg('chimpx-combo-campaigntype', chimpx.combo.CampaignTypes);
 
 // MailChimp list to_name combo box @ TODO: grab default to_name field/value (merge tags) from list settings + allow override
 /*

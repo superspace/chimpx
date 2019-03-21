@@ -20,7 +20,7 @@
  * @package chimpx
  */
 /**
- * Pings MailChimp API
+ * Get a list of MailChimp lists
  *
  * @var modX $modx
  * @var chimpx $chimpx
@@ -29,8 +29,17 @@
  */
 $chimpx =& $modx->chimpx;
 
-$response = $chimpx->ping();
-if ($response != 'Everything\'s Chimpy!') {
-    return $modx->error->failure($modx->lexicon('chimpx.ping_error', array('response' => $response)));
+$resources = $chimpx->getResources();
+
+$out = [];
+
+foreach ($resources as $resource) {
+    $item = array(
+        'name'=>$resource->get('pagetitle'),
+        'id'=>$resource->get('id')
+    );
+    $out[] = $item;
 }
-return $modx->error->success($modx->lexicon('chimpx.ping_ok', array('response' => $response)));
+
+$count = count($out);
+return $this->outputArray($out, $count);

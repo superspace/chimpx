@@ -30,13 +30,13 @@
 $chimpx =& $modx->chimpx;
 
 // campaign type
-if (!empty($scriptProperties['campaign_type'])) {
-    $type = $scriptProperties['campaign_type'];
-} else {
-    $msg = $modx->lexicon('chimpx.campaign_campaign_type_ns');
-    $modx->log(modX::LOG_LEVEL_INFO,$msg);
-    return $modx->error->failure($msg);
-}
+// if (!empty($scriptProperties['campaign_type'])) {
+//     $type = $scriptProperties['campaign_type'];
+// } else {
+//     $msg = $modx->lexicon('chimpx.campaign_campaign_type_ns');
+//     $modx->log(modX::LOG_LEVEL_INFO,$msg);
+//     return $modx->error->failure($msg);
+// }
 
 // standard options for the campaign
 $opts = array();
