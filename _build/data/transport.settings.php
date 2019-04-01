@@ -40,7 +40,7 @@ $settings['chimpx.templates']= $modx->newObject('modSystemSetting');
 $settings['chimpx.templates']->fromArray(array(
     'key' => 'chimpx.templates',
     'value' => '',
-    'xtype' => 'text',
+    'xtype' => 'textfield',
     'namespace' => 'chimpx',
     'area' => '',
 ),'',true,true);

@@ -166,9 +166,20 @@ class chimpx {
      * @param boolean $limit
      * @return array The campaigns list
      */
-    public function getCampaigns($filters = array(), $start = false, $limit = false) {
-        $params = array('filters'=>$filters, 'offset'=>$start, 'count'=>$limit);
+    public function getCampaigns($filters = array(), $start = 0, $limit = 0) {
+
+        $fields = 'campaigns.id,campaigns.type,campaigns.create_time,campaigns.status,campaigns.recipients.list_id,campaigns.recipients.list_name,campaigns.settings.subject_line,campaigns.settings.title,total_items';
+
+        $params = array(
+            'filters'=>$filters, 
+            'offset'=>$start, 
+            'count'=>$limit, 
+            'fields'=>$fields, 
+            'sort_field'=>'create_time',
+            'sort_dir'=>'DESC');
+
         $campaigns = $this->mc->get('campaigns', $params);
+
         return $campaigns;
     }
 
@@ -192,19 +203,13 @@ class chimpx {
 
     public function displayCampaign ($campaign) {
         $record = [];
-
         $record['id'] = $campaign['id'];
-
         $record['subject'] = $campaign['settings']['subject_line'];
         $record['title'] = $campaign['settings']['title'];
-
         $record['list_from_name'] = $campaign['settings']['from_name'];
         $record['list_from_email'] = $campaign['settings']['reply_to'];
-
         $record['campaign_type'] = $campaign['type'];
-
         $record['list_id'] = $campaign['recipients']['list_id'];
-
 
         return $record;
     }
@@ -227,10 +232,9 @@ class chimpx {
             $list[] = $campaign;
         }
 
-        $listname = array_column($list, 'listname');
         $create_time = array_column($list, 'create_time');
 
-        array_multisort($listname, SORT_ASC, $create_time, SORT_DESC, $list);
+        array_multisort($create_time, SORT_DESC, $list);
 
         return $list;
     }

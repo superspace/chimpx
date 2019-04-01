@@ -23,9 +23,9 @@ chimpx.grid.Campaigns = function(config) {
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
-        ,grouping: true
+        ,grouping: false
         //,groupBy: 'list_id'
-        ,groupBy: 'listname'
+        // ,groupBy: 'listname'
         ,sortBy: 'create_time'
         ,sortDir: 'DESC'
         ,singleText: _('chimpx.campaign')
@@ -39,6 +39,10 @@ chimpx.grid.Campaigns = function(config) {
                 ,renderer: true
             }*/
             ,hidden: true
+        },{
+            header: _('chimpx.campaign_list_name')
+            ,dataIndex: 'listname'
+            ,sortable: true
         },{
             header: _('chimpx.campaign_name')
             ,dataIndex: 'title'
