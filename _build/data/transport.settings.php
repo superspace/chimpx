@@ -36,6 +36,7 @@ $settings['chimpx.apikey']->fromArray(array(
     'namespace' => 'chimpx',
     'area' => '',
 ),'',true,true);
+$settings['chimpx.templates']= $modx->newObject('modSystemSetting');
 $settings['chimpx.templates']->fromArray(array(
     'key' => 'chimpx.templates',
     'value' => '',
