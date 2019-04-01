@@ -26,10 +26,11 @@ chimpx.page.Home = function(config) {
         //         location.href = '?a='+ chimpx.action + '&action=account';
         //     }
         // },
-        {
-            text: _('chimpx_help')
-            ,handler: this.mailchimpHelp
-        }]
+        // {
+        //     text: _('chimpx_help')
+        //     ,handler: this.mailchimpHelp
+        // }
+        ]
     }); 
     chimpx.page.Home.superclass.constructor.call(this, config);
 };

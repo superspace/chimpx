@@ -38,14 +38,17 @@ $_lang['chimpx.mailchimp_account'] = 'Ihr MailChimp Account';
 $_lang['chimpx_help'] = 'Hilfe';
 
 // campaigns grid
-$_lang['chimpx.campaigns'] = 'Alle Ihre Kampagnen';
+$_lang['chimpx.tab_campaigns'] = 'Alle Ihre Kampagnen';
+
+$_lang['chimpx.campaigns'] = 'Kampagnen';
+$_lang['chimpx.campaign'] = 'Kampagne';
 
 $_lang['chimpx.campaign_err_nf'] = 'Kampagne nicht gefunden.';
 $_lang['chimpx.campaign_err_ns'] = 'Kampagne nicht spezifiziert.';
 $_lang['chimpx.campaign_err_remove'] = 'Es trat ein Fehler auf beim Versuch, die Kampagne zu entfernen.';
 $_lang['chimpx.campaign_err_save'] = 'Es trat ein Fehler auf beim Versuch, die Kampagne zu speichern.';
 
-$_lang['chimpx.campaign_create'] = 'neue Kampagne erstellen';
+$_lang['chimpx.campaign_create'] = 'Neue Kampagne erstellen';
 $_lang['chimpx.campaign_remove'] = 'Kampagne löschen';
 $_lang['chimpx.campaign_remove_confirm'] = 'Sind Sie sicher, dass Sie die Kampagne entfernen möchten?';
 $_lang['chimpx.campaign_send'] = 'Kampagne senden';
@@ -117,7 +120,7 @@ $_lang['chimpx.campaigntype_combo_trans'] = 'Trans [?]';
 $_lang['chimpx.campaigntype_combo_auto'] = 'AutoResponder';
 
 // lists grid
-$_lang['chimpx.lists'] = 'Alle Ihre Listen';
+$_lang['chimpx.tab_lists'] = 'Alle Ihre Listen';
 $_lang['chimpx.lists_intro_msg'] = 'Sehen Sie Ihre MailChimp Listen ein. Wenn Sie eine neue anlegen möchten, müssen Sie dies über <a href="//login.mailchimp.com" target="_blank">MailChimp</a> direkt tun.';
 $_lang['chimpx.list_id'] = 'ID';
 $_lang['chimpx.list_web_id'] = 'Web ID';
@@ -127,6 +130,10 @@ $_lang['chimpx.list_email_type_option'] = 'HTML + text';
 $_lang['chimpx.list_use_awesomebar'] = 'Awesome Bar';
 $_lang['chimpx.list_list_rating'] = 'Listenbewertung';
 $_lang['chimpx.list_member_count'] = 'Abonnenten';
+
+$_lang['chimpx.list_tab_details'] = 'xxxxxxxxxxxx';
+
+$_lang['chimpx.list_tab_subscribers'] = 'Empfängerlisten';
 
 // lists combo box
 $_lang['chimpx.list_combo_blank'] = 'Liste auswöhlen';

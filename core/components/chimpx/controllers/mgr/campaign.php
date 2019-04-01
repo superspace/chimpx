@@ -28,7 +28,6 @@
  * @subpackage controllers
  */
 
-$record = [];
 $create = empty($_REQUEST['id']) ? true : false;
 
 if (!$create) {
@@ -38,6 +37,8 @@ if (!$create) {
 
     $campaign = $chimpx->getCampaign($cid);
     $content = $chimpx->getCampaignContent($cid);
+
+    $record = $chimpx->displayCampaign($campaign);
 
     $record['html'] = $content['html'];
     $record['text'] = $content['plain_text'];

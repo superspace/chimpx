@@ -36,6 +36,13 @@ $settings['chimpx.apikey']->fromArray(array(
     'namespace' => 'chimpx',
     'area' => '',
 ),'',true,true);
+$settings['chimpx.templates']->fromArray(array(
+    'key' => 'chimpx.templates',
+    'value' => '',
+    'xtype' => 'text',
+    'namespace' => 'chimpx',
+    'area' => '',
+),'',true,true);
 
 
 return $settings;

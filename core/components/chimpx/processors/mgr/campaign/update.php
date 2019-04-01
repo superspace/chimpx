@@ -29,45 +29,30 @@
  */
 $chimpx =& $modx->chimpx;
 
-if (!empty($scriptProperties['id'])) {
-    $type = $scriptProperties['id'];
-} else {
+if (empty($scriptProperties['id'])) {
     $msg = $modx->lexicon('chimpx.campaign_err_nf');
     $modx->log(modX::LOG_LEVEL_INFO,$msg);
     return $modx->error->failure($msg);
 }
-
 $cid = $scriptProperties['id'];
-$chimpx->campaignUpdate($cid, $_POST);
-//$name = $scriptProperties['name'];
-//$value = $scriptProperties['value'];
-//
-////@TODO: retrieve the resource ID from the complete URL (content-url)
-//
-//$content = array();
-//
-//foreach($_POST as $name => $value) {
-//    // let's check the prefixed values (content-*…)
-//    if(substr($name,0,8) == 'content-') {
-//        // we got value for the content array
-//        if($name == 'content-url') {
-//            // we need to make an url with the ID
-//            $content['url'] = $modx->makeUrl($scriptProperties['content-url']);
-//            $name = 'content';
-//            $retval = $api->campaignUpdate($cid,$name,$content);
-//            unset($name);
-//        } else {
-//            // Nothing's implemented yet… that's a reminder for later
-//            /*$content[ltrim($name, 'content-')] = $scriptProperties[$name];
-//            $name = 'content';
-//            $retval = $api->campaignUpdate($cid,$name,$content);
-//            unset($name);*/
-//        }
-//    } else {
-//        // the values should be in the options array, so thread them normally
-//        $retval = $api->campaignUpdate($cid,$name,$value);
-//    }
-//}
+
+$data= [];
+
+$settings = [];
+$settings['subject_line'] = $modx->getOption('subject', $_POST, '');
+$settings['title'] = $modx->getOption('title', $_POST, '');
+$settings['from_name'] = $modx->getOption('from_name', $_POST, '');
+$settings['from_email'] = $modx->getOption('from_email', $_POST, '');
+
+$recipients = [];
+$recipients['list_id'] = $modx->getOption('list_select', $_POST);
+
+$data['settings'] = $settings;
+$data['recipients'] = $recipients;
+
+$data['url'] = $modx->getOption('url', $_POST);
+
+$chimpx->campaignUpdate($cid, $data);
 
 if ($chimpx->isError()){
     return $chimpx->getError();

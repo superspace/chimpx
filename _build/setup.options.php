@@ -35,11 +35,17 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         $setting = $modx->getObject('modSystemSetting',array('key' => 'chimpx.apikey'));
         if ($setting != null) { $values['apikey'] = $setting->get('value'); }
         unset($setting);
+        $setting = $modx->getObject('modSystemSetting',array('key' => 'chimpx.templates'));
+        if ($setting != null) { $values['templates'] = $setting->get('value'); }
+        unset($setting);
     break;
     case xPDOTransport::ACTION_UNINSTALL: break;
 }
 $output = '<label for="chimpx-apikey">MailChimp API Key:</label>
 <input type="text" name="apikey" id="chimpx-apikey" width="300" value="'.$values['apikey'].'" />
+<br /><br />
+<label for="chimpx-templates">MailChimp Templates:</label>
+<input type="text" name="templates" id="chimpx-templates" width="300" value="'.$values['templates'].'" />
 <br /><br />';
 
 return $output;

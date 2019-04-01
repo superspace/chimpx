@@ -173,7 +173,7 @@ class chimpx {
     }
 
     public function getCampaign($cid) {
-        $campaign = $this->mc->get('campaign/' . $cid);
+        $campaign = $this->mc->get('campaigns/' . $cid);
         //TODO: Error checking
         // if ($campaign->errorCode){
         //     $msg = $modx->lexicon('chimpx.error_info', array(
@@ -185,9 +185,28 @@ class chimpx {
     }
 
     public function getCampaignContent($cid) {
-        $content = $this->mc->get('campaign/' . $cid . '/content');
+        $content = $this->mc->get('campaigns/' . $cid . '/content');
         //TODO: Error checking
         return $content;
+    }
+
+    public function displayCampaign ($campaign) {
+        $record = [];
+
+        $record['id'] = $campaign['id'];
+
+        $record['subject'] = $campaign['settings']['subject_line'];
+        $record['title'] = $campaign['settings']['title'];
+
+        $record['list_from_name'] = $campaign['settings']['from_name'];
+        $record['list_from_email'] = $campaign['settings']['reply_to'];
+
+        $record['campaign_type'] = $campaign['type'];
+
+        $record['list_id'] = $campaign['recipients']['list_id'];
+
+
+        return $record;
     }
 
     /**
@@ -207,6 +226,12 @@ class chimpx {
             $campaign['status'] = $this->modx->lexicon('chimpx.campaign_status_'.$campaign['status']);
             $list[] = $campaign;
         }
+
+        $listname = array_column($list, 'listname');
+        $create_time = array_column($list, 'create_time');
+
+        array_multisort($listname, SORT_ASC, $create_time, SORT_DESC, $list);
+
         return $list;
     }
 
@@ -270,15 +295,17 @@ class chimpx {
      * Updates the given campaign data
      * http://apidocs.mailchimp.com/1.3/campaignupdate.func.php
      *
-     * @param string $id The campaign ID
+     * @param string $cid The campaign ID
      * @param array $data An array of fields => values
      */
-    public function campaignUpdate($id, array $data = array()) {
-        // @TODO: control the $_POST data & unset unwanted ones, make sure the campaign is not already sent
-        unset ($data['id']);
-        // foreach ($data as $field => $value) {
-        //     $this->mc->campaignUpdate($id, $field, $value);
-        // }
+    public function campaignUpdate($cid, array $data = array()) {
+        $campaign = $this->mc->patch('campaigns/' . $cid, $data);
+
+        if ($data['url']) {
+            $content = [];
+            $content['url'] = $this->modx->makeUrl($data['url'],'','','abs');
+            $this->mc->put('campaigns/' . $cid . '/content', $content);
+        }
     }
 
     /**
@@ -318,7 +345,6 @@ class chimpx {
 
         $content = [];
         $content['url'] = $this->modx->makeUrl($data['url'],'','','abs');
-        //$content['url'] = 'https://superspace.ch/urs-beyeler.html';
 
         $this->mc->put('campaigns/' . $cid . '/content', $content);
 
@@ -367,6 +393,10 @@ class chimpx {
             if ($location) {
                 $listData['locations'] = $this->listLocations($listData['id']);
             }
+
+            $listData['default_from_name'] = $listData['campaign_defaults']['from_name'];
+            $listData['default_from_email'] = $listData['campaign_defaults']['from_email'];
+
             $output[] = $listData;
         }
         return $output;

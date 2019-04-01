@@ -13,12 +13,24 @@ chimpx.panel.Campaign = function(config) {
         cls: 'container'
         ,id: 'chimpx-panel-campaign'
         ,items: []
+        ,url: chimpx.config.connector_url
+        ,baseParams: {
+            action: 'mgr/campaign/update'
+            ,id:config.record.id
+        }
         ,listeners: {
             setup: {
                 fn: this._init
                 ,scope: this
             }
         }
+        ,buttons: [{
+            text: config.saveBtnText || _('save')
+            ,scope: this
+            ,handler: function() {
+                this.submit();
+            }
+        }]
     });
     chimpx.panel.Campaign.superclass.constructor.call(this, config);
     //this.on('render', this._init, this);
@@ -141,7 +153,7 @@ Ext.extend(chimpx.panel.Campaign, MODx.FormPanel, {
             ,fieldLabel: _('chimpx.campaign_url')
             ,description: _('chimpx.campaign_url_desc')
             ,name: 'url'
-            ,allowBlank: false
+            ,allowBlank: true
         });
         /*content.push({
             xtype: 'modx-tabs'
@@ -270,7 +282,6 @@ Ext.extend(chimpx.panel.Campaign, MODx.FormPanel, {
         var i = e.selectedIndex;
         var s = e.getStore();
         var record = s.getAt(i);
-        //console.log(record);
         var nameValue = record.data.default_from_name;
         var mailValue = record.data.default_from_email;
         var subjectValue = record.data.default_subject;

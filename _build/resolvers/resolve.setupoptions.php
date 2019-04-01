@@ -31,6 +31,7 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     case xPDOTransport::ACTION_UPGRADE:
         $settings = array(
             'apikey',
+            'templates'
         );
         foreach ($settings as $key) {
             if (isset($options[$key])) {

@@ -117,6 +117,7 @@ Ext.extend(chimpx.grid.Campaigns,MODx.grid.Grid,{
         if (!this.windows.createCampaign) {
             this.windows.createCampaign = MODx.load({
                 xtype: 'chimpx-window-campaign-create'
+                ,height: 480
                 ,listeners: {
                     'success': {fn:function() {
                         this.refresh();
@@ -301,6 +302,9 @@ chimpx.window.CreateCampaign = function(config) {
             ,name: 'list_select'
             ,width: 300
             ,listWidth: 300
+            // ,listeners: {
+            //     select: this.onListSelect
+            // }
         }
         // ,{
         //     xtype: 'chimpx-combo-campaigntype'
@@ -341,16 +345,7 @@ chimpx.window.CreateCampaign = function(config) {
             ,id: 'chimpx-'+this.ident+'-url'
             ,width: 300
             ,allowBlank: false
-        }/*,{
-            //xtype: 'chimpx-combo-list_to_name'
-            xtype: 'textfield'
-            ,fieldLabel: _('chimpx.list_to_name')
-            ,labelStyle: 'width: 180px'
-            ,description: _('chimpx.list_to_name_desc')
-            ,name: 'to_name'
-            ,id: 'chimpx-'+this.ident+'-to_name'
-            ,width: 300
-        }*/,{
+        },{
             xtype: 'textfield'
             ,fieldLabel: _('chimpx.list_from_name')
             ,description: _('chimpx.list_from_name_desc')
@@ -368,20 +363,37 @@ chimpx.window.CreateCampaign = function(config) {
             ,id: 'chimpx-'+this.ident+'-from_email'
             ,width: 300
             ,allowBlank: false
-        }/*,{
-            //xtype: 'combo-boolean'
-            xtype: 'chimpx-boolean'
-            ,fieldLabel: _('chimpx.campaign_generate_text')
-            ,description: _('chimpx.campaign_generate_text_desc')
-            ,labelStyle: 'width: 180px'
-            ,name: 'generate_text'
-            ,id: 'chimpx-'+this.ident+'-generate_text'
-            ,width: 300
-        }*/]
+        }]
+
     });
     chimpx.window.CreateCampaign.superclass.constructor.call(this,config);
 };
-Ext.extend(chimpx.window.CreateCampaign,MODx.Window);
+Ext.extend(chimpx.window.CreateCampaign,MODx.Window, {
+        onListSelect: function (e) {
+            var i = e.selectedIndex;
+            console.log(this);
+            var s = e.getStore();
+            if (s) {
+                var record = s.getAt(i);
+                var nameValue = record.data.default_from_name;
+                var mailValue = record.data.default_from_email;
+
+                var name = Ext.getCmp('chimpx-'+e.id+'-from_name');
+                var mail = Ext.getCmp('chimpx-'+e.id+'-from_email');
+
+                if (name && name.getValue == '') {
+                    name.setValue(nameValue);
+                }
+                // console.log('chimpx-'+e.id+'-from_name');
+                if (mail && mail.getValue == '') {
+                    mail.setValue(mailValue);
+                }
+
+            }
+
+        }
+
+});
 Ext.reg('chimpx-window-campaign-create',chimpx.window.CreateCampaign);
 
 // update campaign window @ TODO: save per field basis (only allowed by API)
@@ -557,7 +569,7 @@ chimpx.combo.listLists = function(config) {
         ,hiddenName : 'list_select'
         ,forceSelection: true
         ,selectOnFocus: true
-        ,fields: ['id', 'name']
+        ,fields: ['id', 'name', 'default_from_name', 'default_from_email', 'default_subject']
         ,displayField : 'name'
         ,valueField : 'id'
         ,triggerAction : 'all'

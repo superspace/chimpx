@@ -23,10 +23,21 @@ chimpx.page.Campaign = function(config) {
             ,handler: function() {
                 location.href = '?a='+ chimpx.action;
             }
-        },'-',{
-            text: _('chimpx_help')
-            ,handler: this.mailchimpHelp
-        }]
+        }
+        // , '-', {
+        //     text: config.saveBtnText || _('save')
+        //     ,scope: this
+        //     ,handler: function() {
+        //         this.submit(false);
+        //     }
+        // }
+
+
+        //,'-',{
+        //     text: _('chimpx_help')
+        //     ,handler: this.mailchimpHelp
+        // }
+        ]
     }); 
     chimpx.page.Campaign.superclass.constructor.call(this, config);
 };
@@ -36,7 +47,7 @@ Ext.extend(chimpx.page.Campaign, MODx.Component, {
     ,util:{}, window:{}, panel:{}, tree:{}, form:{}, grid:{}, combo:{}, toolbar:{}, page:{}, msg:{}
 
     ,mailchimpHelp: function(b) {
-        var url = 'http://kb.mailchimp.com';
+        var url = 'https://mailchimp.com/help/';
         if (!url) { return false; }
         chimpx.helpWindow = new Ext.Window({
             title: 'MailChimp Knowledge Base'
