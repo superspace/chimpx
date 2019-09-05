@@ -23,6 +23,9 @@ chimpx.panel.Campaign = function(config) {
                 fn: this._init
                 ,scope: this
             }
+            ,success: function (o) {
+                location.href = '?a='+MODx.request.a;
+            }
         }
         ,buttons: [{
             text: config.saveBtnText || _('save')
@@ -57,10 +60,10 @@ Ext.extend(chimpx.panel.Campaign, MODx.FormPanel, {
         // Load the data, if any
         if (!this.initialized) {
             // Pre load the campaign type
-            if (this.config.record.type) {
-                var campaign_type_field = Ext.getCmp('campaign_type');
-                campaign_type_field.setValue(this.config.record.type);
-            }
+            // if (this.config.record.type) {
+            //     var campaign_type_field = Ext.getCmp('campaign_type');
+            //     campaign_type_field.setValue(this.config.record.type);
+            // }
             // Pre load the list id
             if (this.config.record.list_id) {
                 var list_id_field = Ext.getCmp('list_id');
@@ -132,39 +135,39 @@ Ext.extend(chimpx.panel.Campaign, MODx.FormPanel, {
             ,description: _('chimpx.campaign_title_desc')
             ,name: 'title'
         });
-        column.push({
-            title: 'Campaign content'
-            ,layout: 'form'
-            ,collapsible: true
-            ,bodyCssClass: 'main-wrapper'
-            ,style: 'margin-top: 25px'
-            ,defaults: {
-                anchor: '100%'
-            }
-            ,items: this.buildContent()
-        });
+        // column.push({
+        //     title: 'Campaign content'
+        //     ,layout: 'form'
+        //     ,collapsible: true
+        //     ,bodyCssClass: 'main-wrapper'
+        //     ,style: 'margin-top: 25px'
+        //     ,defaults: {
+        //         anchor: '100%'
+        //     }
+        //     ,items: this.buildContent()
+        // });
         return column;
     }
 
     ,buildContent: function() {
         var content = [];
-        content.push({
-            xtype: 'textfield'
-            ,fieldLabel: _('chimpx.campaign_url')
-            ,description: _('chimpx.campaign_url_desc')
-            ,name: 'url'
-            ,allowBlank: true
-        });
-        /*content.push({
-            xtype: 'modx-tabs'
-            ,id: 'tabs'
-            ,defaults: {
-                border: false
-                ,autoHeight: true
-            }
-            //,border: true
-            ,items: this.buildContentTabs()
-        });*/
+        // content.push({
+        //     xtype: 'textfield'
+        //     ,fieldLabel: _('chimpx.campaign_url')
+        //     ,description: _('chimpx.campaign_url_desc')
+        //     ,name: 'url'
+        //     ,allowBlank: true
+        // });
+        // content.push({
+        //     xtype: 'modx-tabs'
+        //     ,id: 'tabs'
+        //     ,defaults: {
+        //         border: false
+        //         ,autoHeight: true
+        //     }
+        //     //,border: true
+        //     ,items: this.buildContentTabs()
+        // });
         return content;
     }
 
@@ -251,14 +254,16 @@ Ext.extend(chimpx.panel.Campaign, MODx.FormPanel, {
             ,listeners: {
                 select: this.onListSelect
             }
-        },{
-            xtype: 'chimpx-combo-mccampaigntype'
-            ,id: 'campaign_type'
-            ,fieldLabel: _('chimpx.campaign_campaign_type')
-            ,description: _('chimpx.campaign_campaign_type_desc')
-            ,allowBlank: false
-            ,name: 'campaign_type'
-        },{
+        },
+        // {
+        //     xtype: 'chimpx-combo-mccampaigntype'
+        //     ,id: 'campaign_type'
+        //     ,fieldLabel: _('chimpx.campaign_campaign_type')
+        //     ,description: _('chimpx.campaign_campaign_type_desc')
+        //     ,allowBlank: false
+        //     ,name: 'campaign_type'
+        // },
+        {
             xtype: 'textfield'
             ,id: 'list_from_name'
             ,fieldLabel: _('chimpx.list_from_name')

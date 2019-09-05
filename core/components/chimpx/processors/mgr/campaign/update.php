@@ -50,7 +50,7 @@ $recipients['list_id'] = $modx->getOption('list_select', $_POST);
 $data['settings'] = $settings;
 $data['recipients'] = $recipients;
 
-$data['url'] = $modx->getOption('url', $_POST);
+//$data['url'] = $modx->getOption('url', $_POST);
 
 $chimpx->campaignUpdate($cid, $data);
 

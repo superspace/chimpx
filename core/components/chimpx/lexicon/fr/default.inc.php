@@ -83,8 +83,8 @@ $_lang['chimpx.campaign_campaign_type_desc'] = 'Quel type de campagne voulez-vou
 <span style="color: red">NOTE: </span>Seules les campagnes traditionnelles sont supportées pour le moment';
 $_lang['chimpx.campaign_title'] = 'Titre de la campagne';
 $_lang['chimpx.campaign_title_desc'] = 'Nom interne de la campagne (facultatif)';
-$_lang['chimpx.campaign_url'] = 'ID de la ressource';
-$_lang['chimpx.campaign_url_desc'] = 'ID de la ressource à utiliser comme model de newsletter.<br />
+$_lang['chimpx.campaign_url'] = 'Ressource';
+$_lang['chimpx.campaign_url_desc'] = 'Ressource à utiliser comme model de newsletter.<br />
 <span style="color: red">NOTE: </span>cette ressource doit être publiée ET accessible depuis internet';
 
 $_lang['chimpx.list_to_name'] = 'Destinataire';

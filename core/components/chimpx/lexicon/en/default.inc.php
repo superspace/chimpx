@@ -83,8 +83,8 @@ $_lang['chimpx.campaign_campaign_type_desc'] = "What sort of campaign would you 
 <span style=\"color: red\">NOTE: </span>Only regular campaigns are supported for now.";
 $_lang['chimpx.campaign_title'] = 'Campaign title';
 $_lang['chimpx.campaign_title_desc'] = 'Internal title of the campaign (optionnal)';
-$_lang['chimpx.campaign_url'] = 'Resource ID';
-$_lang['chimpx.campaign_url_desc'] = 'Resource ID to be used as HTML content for this campaign.<br />
+$_lang['chimpx.campaign_url'] = 'Resource';
+$_lang['chimpx.campaign_url_desc'] = 'Resource to be used as HTML content for this campaign.<br />
 <span style="color: red">NOTE: </span>this resource must be published AND browsable from the web';
 
 $_lang['chimpx.list_to_name'] = 'To name';

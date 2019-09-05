@@ -34,9 +34,10 @@ $resources = $chimpx->getResources();
 $out = [];
 
 foreach ($resources as $resource) {
+    $id = $resource->get('id');
     $item = array(
-        'name'=>$resource->get('pagetitle'),
-        'id'=>$resource->get('id')
+        'name'=>"{$resource->get('pagetitle')} ($id)",
+        'id'=>$id
     );
     $out[] = $item;
 }
